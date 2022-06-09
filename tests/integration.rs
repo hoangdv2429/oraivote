@@ -30,9 +30,9 @@ use cw_voting::msg::{HandleMsg, InitMsg, PollResponse, QueryMsg};
 use cw_voting::state::{PollStatus, State};
 
 // This line will test the output of cargo wasm
-static WASM: &[u8] = include_bytes!("../target/wasm32-unknown-unknown/release/cw_voting.wasm");
+// static WASM: &[u8] = include_bytes!("../target/wasm32-unknown-unknown/release/cw_voting.wasm");
 // You can uncomment this line instead to test productionified build from rust-optimizer
-// static WASM: &[u8] = include_bytes!("../contract.wasm");
+static WASM: &[u8] = include_bytes!("../artifacts/oraivote.wasm");
 
 const DEFAULT_END_HEIGHT: u64 = 100800u64;
 const TEST_CREATOR: &str = "creator";
