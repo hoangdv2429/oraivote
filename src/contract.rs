@@ -383,7 +383,7 @@ pub fn cast_vote(
     let sender_address_raw = deps.api.canonical_address(&info.sender)?;
     let poll_key = &poll_id.to_be_bytes();
     let state = config_read(deps.storage).load()?;
-    if poll_id == 0 || state.poll_count > poll_id {
+    if poll_id == 0 || state.poll_count < poll_id {
         return Err(ContractError::PollNotExist {});
     }
 
