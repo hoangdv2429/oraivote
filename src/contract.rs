@@ -54,6 +54,7 @@ pub fn handle(
         HandleMsg::EndPoll { poll_id } => end_poll(deps, env, info, poll_id),
         HandleMsg::CreatePoll {
             quorum_percentage,
+            title,
             description,
             start_height,
             end_height,
@@ -62,9 +63,10 @@ pub fn handle(
             env,
             info,
             quorum_percentage,
+            title,
             description,
             start_height,
-            end_height,
+            end_height,          
         ),
     }
 }
@@ -190,6 +192,7 @@ pub fn create_poll(
     env: Env,
     info: MessageInfo,
     quorum_percentage: Option<u8>,
+    title: String,
     description: String,
     start_height: Option<u64>,
     end_height: Option<u64>,
@@ -215,6 +218,7 @@ pub fn create_poll(
         end_height: end_height.unwrap_or(env.block.height + DEFAULT_END_HEIGHT_BLOCKS),
         start_height,
         description,
+        title,
     };
     let key = state.poll_count.to_be_bytes();
     poll(deps.storage).save(&key, &new_poll)?;

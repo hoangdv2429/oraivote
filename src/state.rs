@@ -51,6 +51,7 @@ pub struct Poll {
     pub end_height: u64,
     pub start_height: Option<u64>,
     pub description: String,
+    pub title: String
 }
 
 pub fn config(storage: &mut dyn Storage) -> Singleton<State> {

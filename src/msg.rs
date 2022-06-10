@@ -22,6 +22,7 @@ pub enum HandleMsg {
     },
     CreatePoll {
         quorum_percentage: Option<u8>,
+        title: String,
         description: String,
         start_height: Option<u64>,
         end_height: Option<u64>,

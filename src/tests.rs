@@ -84,7 +84,7 @@ mod tests {
         let info = mock_info("voter", &coins(11, VOTING_TOKEN));
 
         let qp = 101;
-        let msg = create_poll_msg(qp, "test".to_string(), None, None);
+        let msg = create_poll_msg(qp,"test_title".to_string(), "test".to_string(), None, None);
 
         let res = handle(deps.as_mut(), mock_env(), info, msg);
 
@@ -102,7 +102,7 @@ mod tests {
         let mut deps = mock_dependencies(&[]);
         let info = mock_info(TEST_VOTER, &coins(11, VOTING_TOKEN));
 
-        let msg = create_poll_msg(30, "a".to_string(), None, None);
+        let msg = create_poll_msg(30, "a".to_string(), "b".to_string(), None, None);
 
         match handle(deps.as_mut(), mock_env(), info.clone(), msg) {
             Ok(_) => panic!("Must return error"),
@@ -113,6 +113,7 @@ mod tests {
         let msg = create_poll_msg(
             100,
             "01234567890123456789012345678901234567890123456789012345678901234".to_string(),
+            "description".to_string(),
             None,
             None,
         );
@@ -126,12 +127,14 @@ mod tests {
 
     fn create_poll_msg(
         quorum_percentage: u8,
+        title: String,
         description: String,
         start_height: Option<u64>,
         end_height: Option<u64>,
     ) -> HandleMsg {
         let msg = HandleMsg::CreatePoll {
             quorum_percentage: Some(quorum_percentage),
+            title,
             description,
             start_height,
             end_height,
@@ -146,7 +149,7 @@ mod tests {
         let (env, info) = mock_info_height(TEST_CREATOR, &coins(2, VOTING_TOKEN), 0, 10000);
 
         let quorum = 30;
-        let msg = create_poll_msg(quorum, "test".to_string(), None, None);
+        let msg = create_poll_msg(quorum, "test".to_string(),"des".to_string(), None, None);
 
         let handle_res = handle(deps.as_mut(), env.clone(), info.clone(), msg.clone()).unwrap();
         assert_create_poll_result(
@@ -167,7 +170,7 @@ mod tests {
         let (env, info) = mock_info_height(TEST_CREATOR, &coins(2, VOTING_TOKEN), 0, 10000);
 
         let quorum = 0;
-        let msg = create_poll_msg(quorum, "test".to_string(), None, None);
+        let msg = create_poll_msg(quorum, "test".to_string(),"test".to_string(), None, None);
 
         let handle_res = handle(deps.as_mut(), env, info, msg.clone()).unwrap();
         assert_create_poll_result(
@@ -188,7 +191,7 @@ mod tests {
         let (env, info) = mock_info_height(TEST_CREATOR, &coins(2, VOTING_TOKEN), 0, 10000);
 
         let msg_end_height = 10001;
-        let msg = create_poll_msg(0, "test".to_string(), None, Some(msg_end_height));
+        let msg = create_poll_msg(0, "test".to_string(), "test".to_string(), None, Some(msg_end_height));
 
         let handle_res = handle(deps.as_mut(), env.clone(), info.clone(), msg.clone()).unwrap();
         assert_create_poll_result(
@@ -235,6 +238,7 @@ mod tests {
 
         let msg = create_poll_msg(
             0,
+            "test".to_string(),
             "test".to_string(),
             None,
             Some(creator_env.clone().block.height + 1),
@@ -314,7 +318,7 @@ mod tests {
         mock_init(deps.as_mut());
         let (mut env, info) = mock_info_height(TEST_CREATOR, &coins(2, VOTING_TOKEN), 1000, 10000);
 
-        let msg = create_poll_msg(0, "test".to_string(), None, Some(env.block.height + 1));
+        let msg = create_poll_msg(0, "test".to_string(), "test".to_string(), None, Some(env.block.height + 1));
 
         let handle_res = handle(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
         assert_create_poll_result(1, 0, 1001, 0, TEST_CREATOR, handle_res, deps.as_mut());
@@ -347,6 +351,7 @@ mod tests {
 
         let msg = create_poll_msg(
             30,
+            "test".to_string(),
             "test".to_string(),
             None,
             Some(creator_env.block.height + 1),
@@ -433,6 +438,7 @@ mod tests {
         let msg = create_poll_msg(
             10,
             "test".to_string(),
+            "test".to_string(),
             None,
             Some(creator_env.block.height + 1),
         );
@@ -518,6 +524,7 @@ mod tests {
         let msg = create_poll_msg(
             quorum_percentage,
             "test".to_string(),
+            "test".to_string(),
             Some(msg_start_height),
             None,
         );
@@ -551,7 +558,7 @@ mod tests {
         mock_init(deps.as_mut());
         let (env, info) = mock_info_height(TEST_CREATOR, &coins(2, VOTING_TOKEN), 0, 10000);
 
-        let msg = create_poll_msg(0, "test".to_string(), None, None);
+        let msg = create_poll_msg(0, "test".to_string(),"test".to_string(), None, None);
 
         let handle_res = handle(deps.as_mut(), env, info, msg.clone()).unwrap();
         assert_create_poll_result(
@@ -589,7 +596,7 @@ mod tests {
 
         let quorum_percentage = 30;
 
-        let msg = create_poll_msg(quorum_percentage, "test".to_string(), None, None);
+        let msg = create_poll_msg(quorum_percentage, "test".to_string(),"test".to_string(), None, None);
 
         let handle_res = handle(deps.as_mut(), env, info, msg.clone()).unwrap();
         assert_create_poll_result(
@@ -733,7 +740,7 @@ mod tests {
         let (env, info) = mock_info_height(TEST_CREATOR, &coins(2, VOTING_TOKEN), 0, 10000);
 
         let quorum_percentage = 30;
-        let msg = create_poll_msg(quorum_percentage, "test".to_string(), None, None);
+        let msg = create_poll_msg(quorum_percentage, "test".to_string(), "test".to_string(), None, None);
         let handle_res = handle(deps.as_mut(), env.clone(), info, msg.clone()).unwrap();
 
         assert_create_poll_result(

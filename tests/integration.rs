@@ -98,12 +98,14 @@ fn proper_initialization() {
 
 fn create_poll_msg(
     quorum_percentage: u8,
+    title: String,
     description: String,
     start_height: Option<u64>,
     end_height: Option<u64>,
 ) -> HandleMsg {
     let msg = HandleMsg::CreatePoll {
         quorum_percentage: Some(quorum_percentage),
+        title,
         description,
         start_height,
         end_height,
@@ -123,7 +125,7 @@ fn happy_days_create_poll() {
     assert_eq!(0, res.messages.len());
 
     let quorum = 30;
-    let msg = create_poll_msg(quorum, "test".to_string(), None, Some(DEFAULT_END_HEIGHT));
+    let msg = create_poll_msg(quorum, "test".to_string(),"test".to_string(), None, Some(DEFAULT_END_HEIGHT));
 
     let handle_res: HandleResponse =
         handle(&mut deps, mock_env(), info.clone(), msg.clone()).unwrap();
@@ -147,7 +149,7 @@ fn create_poll_no_quorum() {
     assert_eq!(0, res.messages.len());
 
     let quorum = 0;
-    let msg = create_poll_msg(quorum, "test".to_string(), None, None);
+    let msg = create_poll_msg(quorum, "test".to_string(),"test".to_string(), None, None);
 
     let handle_res: HandleResponse = handle(&mut deps, env, info, msg.clone()).unwrap();
     assert_create_poll_result(
@@ -176,6 +178,7 @@ fn happy_days_end_poll() {
 
     let msg = create_poll_msg(
         0,
+        "test".to_string(),
         "test".to_string(),
         None,
         Some(creator_env.block.height + 1),
@@ -249,7 +252,7 @@ fn end_poll_zero_quorum() {
 
     //create poll
     let (env2, _) = mock_info_height(&address(0), &[], 1001, 0);
-    let msg = create_poll_msg(0, "test".to_string(), None, Some(env2.block.height));
+    let msg = create_poll_msg(0, "test".to_string(),"test".to_string(), None, Some(env2.block.height));
     let handle_res: HandleResponse =
         handle(&mut deps, env.clone(), info.clone(), msg.clone()).unwrap();
     assert_create_poll_result(1, 0, 1001, 0, creator, handle_res);
@@ -281,7 +284,7 @@ fn end_poll_quorum_rejected() {
     let init_res: InitResponse = init(&mut deps, env.clone(), info.clone(), msg).unwrap();
     assert_eq!(0, init_res.messages.len());
 
-    let msg = create_poll_msg(30, "test".to_string(), None, Some(&env.block.height + 1));
+    let msg = create_poll_msg(30, "test".to_string(), "test".to_string(), None, Some(&env.block.height + 1));
 
     let handle_res: HandleResponse =
         handle(&mut deps, env.clone(), info.clone(), msg.clone()).unwrap();
@@ -355,6 +358,7 @@ fn end_poll_nay_rejected() {
 
     let msg = create_poll_msg(
         10,
+        "test".to_string(),
         "test".to_string(),
         None,
         Some(creator_env.block.height + 1),
@@ -436,7 +440,7 @@ fn happy_days_cast_vote() {
 
     let quorum_percentage = 30;
 
-    let msg = create_poll_msg(quorum_percentage, "test".to_string(), None, None);
+    let msg = create_poll_msg(quorum_percentage, "test".to_string(),"test".to_string(), None, None);
 
     let handle_res: HandleResponse = handle(&mut deps, env, info, msg.clone()).unwrap();
     assert_create_poll_result(
