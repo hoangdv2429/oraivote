@@ -11,7 +11,7 @@ use cosmwasm_std::{
     HandleResponse, HumanAddr, InitResponse, MessageInfo, StdError, StdResult, Storage, Uint128,
 };
 
-pub const VOTING_TOKEN: &str = "voting_token";
+pub const VOTING_TOKEN: &str = "orai";
 pub const DEFAULT_END_HEIGHT_BLOCKS: &u64 = &100_800_u64;
 const MIN_STAKE_AMOUNT: u128 = 1;
 const MIN_DESC_LENGTH: u64 = 3;
@@ -42,7 +42,7 @@ pub fn handle(
     msg: HandleMsg,
 ) -> Result<HandleResponse, ContractError> {
     match msg {
-        HandleMsg::StakeVotingTokens {} => stake_voting_tokens(deps, env, info),
+        HandleMsg::StakeVotingTokens { } => { stake_voting_tokens(deps, env, info) },
         HandleMsg::WithdrawVotingTokens { amount } => {
             withdraw_voting_tokens(deps, env, info, amount)
         }

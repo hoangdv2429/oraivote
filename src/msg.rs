@@ -16,7 +16,7 @@ pub enum HandleMsg {
         vote: String,
         weight: Uint128,
     },
-    StakeVotingTokens {},
+    StakeVotingTokens { },
     WithdrawVotingTokens {
         amount: Option<Uint128>,
     },
