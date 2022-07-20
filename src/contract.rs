@@ -305,7 +305,7 @@ pub fn end_poll(
             return Err(ContractError::PollNoStake {});
         }
 
-        let quorum = ((tallied_weight / staked_weight) * 100) as u8;
+        let quorum = ((tallied_weight*100 / staked_weight*100) / 100) as u8;
         if a_poll.quorum_percentage.is_some() && quorum < a_poll.quorum_percentage.unwrap() {
             // Quorum: More than quorum_percentage of the total staked tokens at the end of the voting
             // period need to have participated in the vote.
